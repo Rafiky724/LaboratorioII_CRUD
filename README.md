@@ -4,6 +4,14 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Development server
 
+download npm install primeng
+download npm install primeicons
+download npm install primeflex
+
+download npm install firebase @angular/fire
+
+update fire for Angular compatible version
+
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
 ## Code scaffolding
