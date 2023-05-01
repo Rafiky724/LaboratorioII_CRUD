@@ -1,4 +1,27 @@
-<p>home works!</p>
-
-
-<button pButton pRipple label="Volver" (click)="logout()" icon="pi pi-discord"></button>
+<div class="dashboard">
+    <div class="header">
+      <h1>Mi Dashboard</h1>
+      <nav>
+        <a href="#">Inicio</a>
+        <a href="#">Configuración</a>
+        <a (click)="logout()">Cerrar sesión</a>
+      </nav>
+    </div>
+    <div class="content">
+      <div class="card">
+        <h2>Usuarios</h2>
+        <p>Hay 100 usuarios registrados en el sistema.</p>
+      </div>
+      <div class="card">
+        <h2>Productos</h2>
+        <p>Hay 50 productos disponibles en el inventario.</p>
+      </div>
+      <div class="card">
+        <h2>Ventas</h2>
+        <p>Se han registrado 20 ventas en el último mes.</p>
+      </div>
+    </div>
+    <div class="footer">
+      <p>Derechos reservados</p>
+    </div>
+  </div>

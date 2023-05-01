@@ -10,12 +10,17 @@ import { MessageService } from 'primeng/api';
 import { GoogleAuthProvider } from 'firebase/auth';
 import { GithubAuthProvider } from 'firebase/auth';
 import { TwitterAuthProvider } from 'firebase/auth';
+import { BehaviorSubject } from 'rxjs';
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   userData: any;
 
+  private isLoggedInSubject = new BehaviorSubject<boolean>(false);
+  isLoggedIn$ = this.isLoggedInSubject.asObservable();
+  
   constructor(
     private afs: AngularFirestore,
     private afAuth: AngularFireAuth,
@@ -44,9 +49,17 @@ export class AuthService {
       photoURL: user.photoURL,
       emailVerified: user.emailVerified,
     };
-    return userRef.set(userData, {
-      merge: true,
-    });
+    return userRef
+      .set(userData, {
+        merge: true,
+      })
+      .catch((error) => {
+        if (error.code === 'already-exists') {
+          throw new Error('Error el correo ya fue usado');
+        } else {
+          throw new Error(error.message);
+        }
+      });
   }
 
   async loginWithGoogle() {
@@ -58,12 +71,18 @@ export class AuthService {
           summary: 'Success',
           detail: 'Bienvenido',
         });
+        this.isLoggedInSubject.next(true);
         this.router.navigate(['home']);
       }
-    } catch (error) {
+    } catch (error: any) {
+      const errorMessage =
+        error.code === 'auth/email-already-in-use'
+          ? 'Error el correo ya fue usado'
+          : error.message;
       this.messageServices.add({
         severity: 'error',
         summary: 'Error',
+        detail: errorMessage,
       });
     }
   }
@@ -78,12 +97,15 @@ export class AuthService {
           summary: 'Success',
           detail: 'Bienvenido',
         });
+        this.isLoggedInSubject.next(true);
         this.router.navigate(['home']);
       }
-    } catch (error) {
+    } catch (error: any) {
+      const errorMessage = error.code === 'auth/email-already-in-use';
       this.messageServices.add({
         severity: 'error',
         summary: 'Error',
+        detail: 'El correo ya esta en uso',
       });
     }
   }
@@ -97,12 +119,18 @@ export class AuthService {
           summary: 'Success',
           detail: 'Bienvenido',
         });
+        this.isLoggedInSubject.next(true);
         this.router.navigate(['home']);
       }
-    } catch (error) {
+    } catch (error: any) {
+      const errorMessage =
+        error.code === 'auth/email-already-in-use'
+          ? 'Error el correo ya fue usado'
+          : error.message;
       this.messageServices.add({
         severity: 'error',
         summary: 'Error',
+        detail: errorMessage,
       });
     }
   }
@@ -119,6 +147,7 @@ export class AuthService {
               summary: 'Success',
               detail: 'Bienvenido',
             });
+            this.isLoggedInSubject.next(true);
             this.router.navigate(['home']);
           }
         });
@@ -140,8 +169,9 @@ export class AuthService {
         this.messageServices.add({
           severity: 'success',
           summary: 'Te has registrado',
-          detail: 'Bienvenido'
+          detail: 'Bienvenido',
         });
+        this.isLoggedInSubject.next(true);
         this.router.navigate(['home']);
       })
       .catch(() => {
@@ -158,4 +188,9 @@ export class AuthService {
       this.router.navigate(['login']);
     });
   }
+
+  isLoggedIn(): boolean {
+    return this.isLoggedInSubject.value;
+  }
+
 }

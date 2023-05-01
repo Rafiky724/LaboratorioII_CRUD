@@ -1,3 +1,21 @@
+<div class="wrapper">
+  <div><span class="bubble"></span></div>
+  <div><span class="bubble"></span></div>
+  <div><span class="bubble"></span></div>
+  <div><span class="bubble"></span></div>
+  <div><span class="bubble"></span></div>
+  <div><span class="bubble"></span></div>
+  <div><span class="bubble"></span></div>
+  <div><span class="bubble"></span></div>
+  <div><span class="bubble"></span></div>
+  <div><span class="bubble"></span></div>
+  <div><span class="bubble"></span></div>
+  <div><span class="bubble"></span></div>
+  <div><span class="bubble"></span></div>
+  <div><span class="bubble"></span></div>
+  <div><span class="bubble"></span></div>
+</div>
+
 <div
   class="container h-screen w-full flex justify-content-center align-items-center"
 >
@@ -45,39 +63,22 @@
           >Recuperar Contraseña</a
         >
       </div>
-
-      <button
-        (click)="login(loginUser)"
-        pButton
-        pRipple
-        label="Iniciar sesión"
-        icon="pi pi-user"
-        class="w-full"
-      ></button>
-      <br /><br />
-      <button
-        (click)="loginGoogle()"
-        pButton
-        pRipple
-        icon="pi pi-google"
-        class="w-full"
-      ></button>
-      <br /><br />
-      <button
-        (click)="loginTwitter()"
-        pButton
-        pRipple
-        icon="pi pi-twitter"
-        class="w-full"
-      ></button>
-      <br /><br />
-      <button
-        (click)="loginGithub()"
-        pButton
-        pRipple
-        icon="pi pi-github"
-        class="w-full"
-      ></button>
+      <div class="text-center">
+        <button
+          (click)="login(loginUser)"
+          pButton
+          pRipple
+          label="Iniciar sesión"
+          icon="pi pi-user"
+          class="w-full initSesion"
+        ></button>
+        <br /><br />
+        <div class="containerFlex">
+          <button (click)="loginGoogle()" class="custom-icon-google"></button>
+          <button (click)="loginTwitter()" class="custom-icon-twitter"></button>
+          <button (click)="loginGithub()" class="custom-icon-github"></button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
