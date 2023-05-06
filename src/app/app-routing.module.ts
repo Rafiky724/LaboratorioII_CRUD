@@ -14,7 +14,6 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
-    
   },
   {
     path: 'register',
@@ -24,6 +23,13 @@ const routes: Routes = [
     path: 'home',
     component: HomeComponent,
     canActivate: [CheckLoginGuard],
+  },
+  {
+    path: 'forgot-password',
+    loadChildren: () =>
+      import('./components/forgot-password/forgot-password.module').then(
+        (m) => m.ForgotPasswordModule
+      ),
   },
 ];
 

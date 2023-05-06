@@ -20,7 +20,7 @@ export class AuthService {
 
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
-  
+
   constructor(
     private afs: AngularFirestore,
     private afAuth: AngularFireAuth,
@@ -39,7 +39,15 @@ export class AuthService {
     });
   }
 
-  setUserData(user: any) {
+  async resetPassword(email: any): Promise<void> {
+    try {
+      return this.afAuth.sendPasswordResetEmail(email);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async setUserData(user: any) {
     const userRef: AngularFirestoreDocument<any> =
       this.afs.doc('user/${user.uid');
     const userData: User = {
@@ -192,5 +200,4 @@ export class AuthService {
   isLoggedIn(): boolean {
     return this.isLoggedInSubject.value;
   }
-
 }
