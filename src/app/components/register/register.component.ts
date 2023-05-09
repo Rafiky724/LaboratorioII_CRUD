@@ -10,6 +10,7 @@ export class RegisterComponent implements OnInit {
   registerUser: any = {
     email: '',
     password: '',
+    displayName: '',
   };
 
   constructor(private authService: AuthService) {}
@@ -17,6 +18,10 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {}
 
   register(registerUser: any) {
-    this.authService.register(registerUser.email, registerUser.password);
+    this.authService.register(
+      registerUser.email,
+      registerUser.password,
+      registerUser.displayName
+    );
   }
 }

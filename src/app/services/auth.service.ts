@@ -10,7 +10,7 @@ import { MessageService } from 'primeng/api';
 import { GoogleAuthProvider } from 'firebase/auth';
 import { GithubAuthProvider } from 'firebase/auth';
 import { TwitterAuthProvider } from 'firebase/auth';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -39,6 +39,14 @@ export class AuthService {
     });
   }
 
+  async agregarUsuario(usuario: any): Promise<any> {
+    return this.afs.collection('user').add(usuario);
+  }
+
+  getUsuarios(): Observable<any> {
+    return this.afs.collection('user').snapshotChanges();
+  }
+
   async resetPassword(email: any): Promise<void> {
     try {
       return this.afAuth.sendPasswordResetEmail(email);
@@ -47,9 +55,32 @@ export class AuthService {
     }
   }
 
+  async register(email: string, password: string, displayName: string) {
+    return this.afAuth
+      .createUserWithEmailAndPassword(email, password)
+      .then((result) => {
+        result.user?.sendEmailVerification();
+        this.setUserData(result.user);
+        this.messageServices.add({
+          severity: 'success',
+          summary: 'Te has registrado',
+          detail: 'Bienvenido',
+        });
+        this.isLoggedInSubject.next(true);
+        this.router.navigate(['home']);
+      })
+      .catch(() => {
+        this.messageServices.add({
+          severity: 'error',
+          summary: 'Error',
+        });
+      });
+  }
+
   async setUserData(user: any) {
-    const userRef: AngularFirestoreDocument<any> =
-      this.afs.doc('user/${user.uid');
+    const userRef: AngularFirestoreDocument<any> = this.afs
+      .collection('user')
+      .doc(user.uid);
     const userData: User = {
       uid: user.uid,
       email: user.email,
@@ -159,28 +190,6 @@ export class AuthService {
             this.router.navigate(['home']);
           }
         });
-      })
-      .catch(() => {
-        this.messageServices.add({
-          severity: 'error',
-          summary: 'Error',
-        });
-      });
-  }
-
-  async register(email: string, password: string) {
-    return this.afAuth
-      .createUserWithEmailAndPassword(email, password)
-      .then((result) => {
-        result.user?.sendEmailVerification();
-        this.setUserData(result.user);
-        this.messageServices.add({
-          severity: 'success',
-          summary: 'Te has registrado',
-          detail: 'Bienvenido',
-        });
-        this.isLoggedInSubject.next(true);
-        this.router.navigate(['home']);
       })
       .catch(() => {
         this.messageServices.add({

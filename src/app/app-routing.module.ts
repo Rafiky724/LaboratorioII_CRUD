@@ -4,6 +4,7 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { HomeComponent } from './components/home/home.component';
 import { CheckLoginGuard } from './shared/guards/check-login.guard';
+import { CreateUserComponent } from './components/create-user/create-user.component';
 
 const routes: Routes = [
   {
@@ -14,6 +15,11 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+  },
+  {
+    path: 'create-user',
+    component: CreateUserComponent,
+    //canActivate: [CheckLoginGuard],
   },
   {
     path: 'register',

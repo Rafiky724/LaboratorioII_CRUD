@@ -16,8 +16,9 @@ import { ToastModule } from 'primeng/toast';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 import { MessageService } from 'primeng/api';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CreateUserComponent } from './components/create-user/create-user.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     LoginComponent,
     RegisterComponent,
     HomeComponent,
+    CreateUserComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,9 +41,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MessagesModule,
     FormsModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
   ],
   providers: [MessageService],
   bootstrap: [AppComponent],
-
 })
 export class AppModule {}

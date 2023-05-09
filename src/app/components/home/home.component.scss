@@ -1,59 +1,80 @@
 .dashboard {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-  }
-  
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    background-color: #1e88e5;
-    color: white;
-  }
-  
-  .header h1 {
-    margin: 0;
-  }
-  
-  nav a {
-    color: white;
-    margin-left: 10px;
-  }
-  
-  nav a:hover {
-    text-decoration: underline;
-  }
-  
-  .content {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 20px;
-    gap: 20px;
-  }
-  
-  .card {
-    background-color: white;
-    border-radius: 5px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    flex-basis: calc(33.33% - 20px);
-    text-align: center;
-  }
-  
-  .card h2 {
-    margin-top: 0;
-  }
-  
-  .card p {
-    margin-bottom: 0;
-  }
-  
-  .footer {
-    background-color: #1e88e5;
-    color: white;
-    padding: 10px;
-    margin-top: auto;
-  }
-  
+  background: linear-gradient(
+    rgba(0, 0, 0, 0.6),
+    rgba(0, 0, 0, 0.6),
+    url("../../../assets/sea.jpg")
+  );
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: url("../../../assets/sea.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+i {
+  cursor: pointer;
+}
+
+.i {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.h3 {
+  margin-right: 60%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: transparent;
+  color: white;
+}
+
+.header h1 {
+  margin: 0;
+}
+
+nav a {
+  color: white;
+  margin-left: 10px;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+.content {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 20px;
+  gap: 20px;
+}
+
+.card {
+  background-color: white;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  flex-basis: calc(33.33% - 20px);
+  text-align: center;
+}
+
+.card h2 {
+  margin-top: 0;
+}
+
+.card p {
+  margin-bottom: 0;
+}
+
+.footer {
+  background-color: transparent;
+  color: white;
+  padding: 5px;
+  margin-top: auto;
+}
