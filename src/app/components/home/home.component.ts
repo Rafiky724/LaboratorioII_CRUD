@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './../../services/auth.service';
 import { MessageService } from 'primeng/api';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -22,16 +20,38 @@ export class HomeComponent implements OnInit {
   }
 
   getUsuarios() {
+    const processedIds = new Set<string>();
     this.authService.getUsuarios().subscribe((data) => {
       data.forEach((element: any) => {
-        //console.log(element.payload.doc.id);
-        //console.log(element.payload.doc.data());
-        this.usuarios.push({
-          id: element.payload.doc.id,
-          ...element.payload.doc.data(),
-        });
+        const docId = element.payload.doc.id;
+        if (!processedIds.has(docId)) {
+          processedIds.add(docId);
+          this.usuarios.push({
+            id: docId,
+            ...element.payload.doc.data(),
+          });
+        }
       });
     });
+  }
+  
+
+  eliminarUsuario(id: string) {
+    this.authService
+      .eliminarUsuario(id)
+      .then(() => {
+        this.messageServices.add({
+          severity: 'success',
+          summary: 'Usuario eliminado',
+          detail: 'El usuario ha sido eliminado correctamente',
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   logout() {

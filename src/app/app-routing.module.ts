@@ -19,7 +19,7 @@ const routes: Routes = [
   {
     path: 'create-user',
     component: CreateUserComponent,
-    //canActivate: [CheckLoginGuard],
+    canActivate: [CheckLoginGuard],
   },
   {
     path: 'register',

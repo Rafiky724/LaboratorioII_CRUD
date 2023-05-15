@@ -44,7 +44,13 @@ export class AuthService {
   }
 
   getUsuarios(): Observable<any> {
-    return this.afs.collection('user').snapshotChanges();
+    return this.afs
+      .collection('user', (ref) => ref.orderBy('displayName', 'asc'))
+      .snapshotChanges();
+  }
+
+  async eliminarUsuario(id: string): Promise<any> {
+    return this.afs.collection('user').doc(id).delete();
   }
 
   async resetPassword(email: any): Promise<void> {
@@ -60,11 +66,11 @@ export class AuthService {
       .createUserWithEmailAndPassword(email, password)
       .then((result) => {
         result.user?.sendEmailVerification();
-        this.setUserData(result.user);
+        this.setUserData(result.user, displayName);
         this.messageServices.add({
           severity: 'success',
           summary: 'Te has registrado',
-          detail: 'Bienvenido',
+          detail: 'Bienvenido '+ displayName,
         });
         this.isLoggedInSubject.next(true);
         this.router.navigate(['home']);
@@ -77,14 +83,14 @@ export class AuthService {
       });
   }
 
-  async setUserData(user: any) {
+  async setUserData(user: any, displayName: string) {
     const userRef: AngularFirestoreDocument<any> = this.afs
       .collection('user')
       .doc(user.uid);
     const userData: User = {
       uid: user.uid,
       email: user.email,
-      displayName: user.displayName,
+      displayName: displayName,
       photoURL: user.photoURL,
       emailVerified: user.emailVerified,
     };
@@ -103,12 +109,16 @@ export class AuthService {
 
   async loginWithGoogle() {
     try {
-      const user = await this.afAuth.signInWithPopup(new GoogleAuthProvider());
+      const { user } = await this.afAuth.signInWithPopup(
+        new GoogleAuthProvider()
+      );
       if (user) {
+        const displayName = user.displayName;
+        this.setUserData(user, displayName || '');
         this.messageServices.add({
           severity: 'success',
           summary: 'Success',
-          detail: 'Bienvenido',
+          detail: 'Bienvenido ' + displayName,
         });
         this.isLoggedInSubject.next(true);
         this.router.navigate(['home']);
@@ -140,11 +150,14 @@ export class AuthService {
         this.router.navigate(['home']);
       }
     } catch (error: any) {
-      const errorMessage = error.code === 'auth/email-already-in-use';
+      const errorMessage =
+        error.code === 'auth/email-already-in-use'
+          ? 'Error el correo ya fue usado'
+          : error.message;
       this.messageServices.add({
         severity: 'error',
         summary: 'Error',
-        detail: 'El correo ya esta en uso',
+        detail: errorMessage,
       });
     }
   }
@@ -178,18 +191,22 @@ export class AuthService {
     return this.afAuth
       .signInWithEmailAndPassword(email, password)
       .then((result) => {
-        this.setUserData(result.user);
-        this.afAuth.authState.subscribe((user) => {
-          if (user) {
-            this.messageServices.add({
-              severity: 'success',
-              summary: 'Success',
-              detail: 'Bienvenido',
-            });
-            this.isLoggedInSubject.next(true);
-            this.router.navigate(['home']);
-          }
-        });
+        const user = result.user;
+        if (user) {
+          const displayName = user.displayName || '';
+          this.setUserData(user, displayName);
+          this.afAuth.authState.subscribe((user) => {
+            if (user) {
+              this.messageServices.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Bienvenido' + user.displayName,
+              });
+              this.isLoggedInSubject.next(true);
+              this.router.navigate(['home']);
+            }
+          });
+        }
       })
       .catch(() => {
         this.messageServices.add({
